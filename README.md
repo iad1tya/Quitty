@@ -15,13 +15,12 @@
 
 | Feature | Description |
 |---|---|
+| **Launch at Login** | Integrates with macOS login items to start silently on boot. |
 | **Live RAM Monitoring** | Memory usage updates dynamically for every running app. |
 | **Smart Sorting** | Toggle between alphabetical and highest-memory-first ordering. |
 | **Advanced Filtering** | Search bar to quickly locate specific processes across all open apps. |
 | **Safe List (Whitelist)** | Protect apps from being closed when using "Quit All." |
 | **Background Process Visibility** | Reveal and manage hidden menu bar extensions and daemons. |
-| **Graceful & Force Quit** | Hold `⌥ Option` on any app to force-quit instead of gracefully quitting. |
-| **Launch at Login** | Integrates with macOS login items to start silently on boot. |
 
 
 ## Installation
