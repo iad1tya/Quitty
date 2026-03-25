@@ -35,8 +35,16 @@ class DuplicateFinderManager: ObservableObject {
     @Published var isDeleting = false
     @Published var scanProgress: String = ""
     @Published var filesScanned: Int = 0
+    @Published var scanPhase: ScanPhase = .idle
+    @Published var hashProgress: Double = 0 // 0.0 to 1.0
+
+    enum ScanPhase {
+        case idle, indexing, comparing, done
+    }
     @Published var searchPath: URL = FileManager.default.homeDirectoryForCurrentUser
-    @Published var minFileSize: UInt64 = 1024 * 100 // 100 KB minimum
+    @Published var minFileSize: UInt64 = 1024 * 1024 // 1 MB minimum
+
+    private var cancelled = false
 
     var totalWastedSpace: UInt64 {
         groups.reduce(0) { $0 + $1.wastedSpace }
@@ -52,10 +60,17 @@ class DuplicateFinderManager: ObservableObject {
         }
     }
 
+    func cancelScan() {
+        cancelled = true
+    }
+
     func scan() {
+        cancelled = false
         isScanning = true
         groups = []
         filesScanned = 0
+        hashProgress = 0
+        scanPhase = .indexing
 
         DispatchQueue.global(qos: .userInitiated).async {
             // Pass 1: Group files by size
@@ -76,8 +91,32 @@ class DuplicateFinderManager: ObservableObject {
                 return
             }
 
+            // Skip folders that trigger permission prompts or are not useful
+            let skipPrefixes = [
+                "Music", "Photos", "Movies", "Library",
+                ".Trash", ".cache", "node_modules",
+                "Pictures/Photos Library.photoslibrary",
+                "Applications"
+            ]
+
             var count = 0
+            let basePath = self.searchPath.path + "/"
             for case let url as URL in enumerator {
+                if self.cancelled { break }
+
+                // Skip protected/noisy directories
+                let fullPath = url.path
+                if fullPath.hasPrefix(basePath) {
+                    let relative = String(fullPath.dropFirst(basePath.count))
+                    let shouldSkip = skipPrefixes.contains { prefix in
+                        relative == prefix || relative.hasPrefix(prefix + "/")
+                    }
+                    if shouldSkip {
+                        enumerator.skipDescendants()
+                        continue
+                    }
+                }
+
                 let values = try? url.resourceValues(forKeys: keys)
                 guard values?.isRegularFile == true else { continue }
                 let size = UInt64(values?.fileSize ?? 0)
@@ -91,20 +130,55 @@ class DuplicateFinderManager: ObservableObject {
                 }
             }
 
+            if self.cancelled {
+                DispatchQueue.main.async {
+                    self.isScanning = false
+                    self.scanProgress = ""
+                    self.scanPhase = .idle
+                }
+                return
+            }
+
             DispatchQueue.main.async {
                 self.filesScanned = count
-                self.scanProgress = "Comparing files..."
+                self.scanPhase = .comparing
             }
 
             // Pass 2: Hash only files with matching sizes
             let candidates = sizeMap.filter { $0.value.count >= 2 }
+            let totalToHash = candidates.values.reduce(0) { $0 + $1.count }
             var hashMap: [String: [URL]] = [:]
+            var hashed = 0
+
+            DispatchQueue.main.async {
+                self.scanProgress = "Comparing \(totalToHash) files..."
+            }
 
             for (_, urls) in candidates {
+                if self.cancelled { break }
                 for url in urls {
-                    guard let hash = self.hashFile(url) else { continue }
-                    hashMap[hash, default: []].append(url)
+                    if self.cancelled { break }
+                    if let hash = self.hashFile(url) {
+                        hashMap[hash, default: []].append(url)
+                    }
+                    hashed += 1
+                    if hashed % 10 == 0 {
+                        let progress = totalToHash > 0 ? Double(hashed) / Double(totalToHash) : 0
+                        DispatchQueue.main.async {
+                            self.hashProgress = progress
+                            self.scanProgress = "Comparing files... \(hashed)/\(totalToHash)"
+                        }
+                    }
                 }
+            }
+
+            if self.cancelled {
+                DispatchQueue.main.async {
+                    self.isScanning = false
+                    self.scanProgress = ""
+                    self.scanPhase = .idle
+                }
+                return
             }
 
             // Build groups
@@ -123,6 +197,8 @@ class DuplicateFinderManager: ObservableObject {
                 self.groups = duplicateGroups
                 self.isScanning = false
                 self.scanProgress = ""
+                self.scanPhase = .done
+                self.hashProgress = 1.0
             }
         }
     }
@@ -165,15 +241,35 @@ class DuplicateFinderManager: ObservableObject {
         }
     }
 
-    private func hashFile(_ url: URL, bytesToRead: Int = 8192) -> String? {
-        guard let handle = try? FileHandle(forReadingFrom: url) else { return nil }
-        defer { try? handle.close() }
+    private func hashFile(_ url: URL, bytesToRead: Int = 4096) -> String? {
+        // Use DispatchSemaphore to timeout if file read blocks (e.g. permission prompts)
+        var result: String?
+        let semaphore = DispatchSemaphore(value: 0)
 
-        let data = handle.readData(ofLength: bytesToRead)
-        guard !data.isEmpty else { return nil }
+        DispatchQueue.global(qos: .utility).async {
+            guard let handle = try? FileHandle(forReadingFrom: url) else {
+                semaphore.signal()
+                return
+            }
+            defer { try? handle.close() }
 
-        let digest = SHA256.hash(data: data)
-        return digest.compactMap { String(format: "%02x", $0) }.joined()
+            let data = handle.readData(ofLength: bytesToRead)
+            guard !data.isEmpty else {
+                semaphore.signal()
+                return
+            }
+
+            let digest = SHA256.hash(data: data)
+            result = digest.compactMap { String(format: "%02x", $0) }.joined()
+            semaphore.signal()
+        }
+
+        // Wait max 2 seconds per file — skip if it blocks
+        let timeout = semaphore.wait(timeout: .now() + 2)
+        if timeout == .timedOut {
+            return nil
+        }
+        return result
     }
 
     static func formatBytes(_ bytes: UInt64) -> String {

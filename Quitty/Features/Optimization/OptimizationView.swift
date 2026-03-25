@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct OptimizationView: View {
     @ObservedObject var manager: OptimizationManager
@@ -150,18 +151,17 @@ struct LaunchItemRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Circle()
-                .fill(item.isEnabled ? Color.green : Color.secondary.opacity(0.3))
-                .frame(width: 8, height: 8)
+            // App icon from bundle ID
+            appIcon
+                .frame(width: 28, height: 28)
 
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(item.name)
                     .font(.system(size: 12, weight: .medium))
-                Text(item.label)
+                Text(item.description)
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
                     .lineLimit(1)
-                    .truncationMode(.middle)
             }
 
             Spacer()
@@ -174,12 +174,26 @@ struct LaunchItemRow: View {
                 .toggleStyle(.switch)
                 .controlSize(.small)
             } else {
-                Text(item.isEnabled ? "Active" : "Disabled")
-                    .font(.system(size: 10))
-                    .foregroundColor(.secondary)
+                Circle()
+                    .fill(item.isEnabled ? Color.green : Color.secondary.opacity(0.3))
+                    .frame(width: 8, height: 8)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 3)
         .listRowInsets(EdgeInsets(top: 2, leading: 16, bottom: 2, trailing: 16))
+    }
+
+    @ViewBuilder
+    var appIcon: some View {
+        if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: item.label) {
+            Image(nsImage: NSWorkspace.shared.icon(forFile: url.path))
+                .resizable()
+                .interpolation(.high)
+                .aspectRatio(contentMode: .fit)
+        } else {
+            Image(systemName: "gearshape.2.fill")
+                .font(.system(size: 16))
+                .foregroundColor(.secondary)
+        }
     }
 }

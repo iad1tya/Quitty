@@ -9,6 +9,48 @@ struct LaunchItem: Identifiable {
     let label: String
     var isEnabled: Bool
     let isUserAgent: Bool // true = user, false = system (read-only)
+    let description: String
+
+    static func descriptionFor(_ label: String) -> String {
+        let key = label.lowercased()
+        // Known agents
+        if key.contains("steam") { return "Steam game platform background service" }
+        if key.contains("bluejeans") || key.contains("bluejeansn") { return "BlueJeans video conferencing helper" }
+        if key.contains("tunnelblick") { return "Tunnelblick VPN auto-connect at login" }
+        if key.contains("cleanmymac") || key.contains("macpaw") {
+            if key.contains("scheduler") { return "CleanMyMac scheduled cleanup tasks" }
+            if key.contains("updater") || key.contains("update") { return "CleanMyMac auto-updater" }
+            return "CleanMyMac background service"
+        }
+        if key.contains("google") && key.contains("keystone") { return "Google Chrome auto-updater" }
+        if key.contains("google") && key.contains("update") { return "Google software updater" }
+        if key.contains("spotify") { return "Spotify background helper" }
+        if key.contains("discord") { return "Discord auto-update helper" }
+        if key.contains("slack") { return "Slack background service" }
+        if key.contains("zoom") { return "Zoom video meetings helper" }
+        if key.contains("dropbox") { return "Dropbox file sync service" }
+        if key.contains("adobe") { return "Adobe Creative Cloud background service" }
+        if key.contains("microsoft") { return "Microsoft Office background service" }
+        if key.contains("krisp") { return "Krisp AI noise cancellation" }
+        if key.contains("1password") || key.contains("onepassword") { return "1Password browser integration helper" }
+        if key.contains("raycast") { return "Raycast launcher background service" }
+        if key.contains("alfred") { return "Alfred launcher background service" }
+        if key.contains("bartender") { return "Bartender menu bar manager" }
+        if key.contains("istat") { return "iStat Menus system monitor" }
+        if key.contains("little.snitch") || key.contains("littlesnitch") { return "Little Snitch network firewall" }
+        if key.contains("karabiner") { return "Karabiner keyboard remapper" }
+        if key.contains("backblaze") { return "Backblaze cloud backup service" }
+        if key.contains("jetbrains") { return "JetBrains IDE toolbox helper" }
+        if key.contains("docker") { return "Docker container engine" }
+
+        // Generic patterns
+        if key.contains("update") || key.contains("updater") { return "Auto-update service" }
+        if key.contains("helper") || key.contains("agent") { return "Background helper service" }
+        if key.contains("launch") && key.contains("login") { return "Auto-start at login" }
+        if key.contains("sync") { return "File sync service" }
+
+        return "Background service"
+    }
 }
 
 struct HeavyProcess: Identifiable {
@@ -113,7 +155,8 @@ class OptimizationManager: ObservableObject {
                 path: url,
                 label: label,
                 isEnabled: isEnabled,
-                isUserAgent: isUserAgent
+                isUserAgent: isUserAgent,
+                description: LaunchItem.descriptionFor(label)
             ))
         }
         return items
