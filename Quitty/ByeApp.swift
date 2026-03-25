@@ -5,7 +5,7 @@ struct QuittyApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        WindowGroup {
+        Window("Quitty", id: "main") {
             ContentView()
         }
         .windowStyle(.titleBar)
@@ -31,24 +31,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @objc func toggleWindow() {
-        if let window = NSApplication.shared.windows.first(where: { $0.title.contains("Quitty") || $0.contentView is NSHostingView<ContentView> }) {
-            if window.isVisible {
+        let app = NSApplication.shared
+
+        // Find any non-settings window
+        if let window = app.windows.first(where: { !$0.title.contains("Settings") && $0.canBecomeMain }) {
+            if window.isVisible && window.isKeyWindow {
                 window.orderOut(nil)
             } else {
                 window.makeKeyAndOrderFront(nil)
-                NSApplication.shared.activate(ignoringOtherApps: true)
+                app.activate(ignoringOtherApps: true)
             }
         } else {
-            NSApplication.shared.activate(ignoringOtherApps: true)
+            // No window found — activate app, SwiftUI will recreate
+            app.activate(ignoringOtherApps: true)
         }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         if !flag {
-            NSApplication.shared.activate(ignoringOtherApps: true)
-            for window in NSApplication.shared.windows {
+            for window in NSApplication.shared.windows where window.canBecomeMain {
                 window.makeKeyAndOrderFront(nil)
             }
+            NSApplication.shared.activate(ignoringOtherApps: true)
         }
         return true
     }

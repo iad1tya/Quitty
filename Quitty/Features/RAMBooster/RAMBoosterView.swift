@@ -35,6 +35,13 @@ struct RAMBoosterView: View {
             }
             .padding(.horizontal, 16)
 
+            if manager.freedAmount > 0 {
+                Text("Freed \(RAMBoosterManager.formatBytes(manager.freedAmount))")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(.green)
+                    .padding(.top, 4)
+            }
+
             Spacer()
 
             Button(action: { manager.freeRAMAction() }) {

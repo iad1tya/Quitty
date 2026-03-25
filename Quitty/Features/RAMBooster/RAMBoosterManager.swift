@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import AppKit
 import Darwin
 
 class RAMBoosterManager: ObservableObject {
@@ -56,22 +57,63 @@ class RAMBoosterManager: ObservableObject {
         }
     }
 
+    @Published var freedAmount: UInt64 = 0
+
     func freeRAMAction() {
         isFreeing = true
-        DispatchQueue.global(qos: .userInitiated).async {
-            // Use memory_pressure to encourage the system to free memory
-            let process = Process()
-            process.executableURL = URL(fileURLWithPath: "/usr/bin/memory_pressure")
-            process.arguments = ["-l", "warn"]
-            process.standardOutput = FileHandle.nullDevice
-            process.standardError = FileHandle.nullDevice
-            try? process.run()
-            process.waitUntilExit()
+        freedAmount = 0
+        let beforeUsed = usedRAM
 
-            Thread.sleep(forTimeInterval: 1.0)
+        DispatchQueue.global(qos: .userInitiated).async {
+            // 1. Kill heavy background/helper processes (not regular apps)
+            let apps = NSWorkspace.shared.runningApplications
+            let safeList = SafeListManager.shared.safeAppIDs
+            let quittyPid = ProcessInfo.processInfo.processIdentifier
+
+            for app in apps {
+                guard let bid = app.bundleIdentifier else { continue }
+                if safeList.contains(bid) { continue }
+                if app.processIdentifier == quittyPid { continue }
+                if bid == "com.apple.finder" || bid == "com.apple.dock" { continue }
+
+                var info = proc_taskinfo()
+                let size = MemoryLayout<proc_taskinfo>.stride
+                let result = proc_pidinfo(app.processIdentifier, PROC_PIDTASKINFO, 0, &info, Int32(size))
+                guard result == size else { continue }
+                let mb = Double(info.pti_resident_size) / (1024 * 1024)
+
+                // Terminate hidden regular apps using > 200 MB
+                if app.activationPolicy == .regular && app.isHidden && mb > 200 {
+                    app.terminate()
+                }
+                // Terminate background agents using > 300 MB
+                if app.activationPolicy != .regular && mb > 300 {
+                    app.terminate()
+                }
+            }
+
+            // 2. Flush disk caches via sync
+            let syncProc = Process()
+            syncProc.executableURL = URL(fileURLWithPath: "/bin/sync")
+            try? syncProc.run()
+            syncProc.waitUntilExit()
+
+            // 3. Clear user font caches, quicklook caches
+            let atsutil = Process()
+            atsutil.executableURL = URL(fileURLWithPath: "/usr/bin/atsutil")
+            atsutil.arguments = ["databases", "-removeUser"]
+            atsutil.standardOutput = FileHandle.nullDevice
+            atsutil.standardError = FileHandle.nullDevice
+            try? atsutil.run()
+            atsutil.waitUntilExit()
+
+            Thread.sleep(forTimeInterval: 2.0)
 
             DispatchQueue.main.async {
                 self.refresh()
+                if beforeUsed > self.usedRAM {
+                    self.freedAmount = beforeUsed - self.usedRAM
+                }
                 self.isFreeing = false
             }
         }

@@ -148,10 +148,21 @@ class TrashBinsManager: ObservableObject {
     func emptyTrash() {
         isEmptying = true
         DispatchQueue.global(qos: .userInitiated).async {
-            let script = NSAppleScript(source: "tell application \"Finder\" to empty the trash")
-            script?.executeAndReturnError(nil)
+            // Use osascript directly — more reliable than NSAppleScript
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+            process.arguments = ["-e", "tell application \"Finder\" to empty the trash"]
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+            do {
+                try process.run()
+                process.waitUntilExit()
+            } catch {
+                print("Empty trash failed: \(error)")
+            }
 
-            Thread.sleep(forTimeInterval: 1.5)
+            Thread.sleep(forTimeInterval: 2.0)
+
             DispatchQueue.main.async {
                 self.isEmptying = false
                 self.scan()

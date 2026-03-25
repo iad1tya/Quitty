@@ -74,11 +74,12 @@ class BatteryManager: ObservableObject {
         DispatchQueue.main.async {
             self.cycleCount = dict["CycleCount"] as? Int ?? 0
             self.designCapacity = dict["DesignCapacity"] as? Int ?? 0
-            let maxCap = dict["MaxCapacity"] as? Int ?? 0
-            self.currentCapacity = dict["CurrentCapacity"] as? Int ?? 0
+            // NominalChargeCapacity is actual max capacity in mAh (MaxCapacity is percentage)
+            let actualMaxCap = dict["NominalChargeCapacity"] as? Int ?? dict["AppleRawMaxCapacity"] as? Int ?? 0
+            self.currentCapacity = dict["AppleRawCurrentCapacity"] as? Int ?? dict["CurrentCapacity"] as? Int ?? 0
 
-            if self.designCapacity > 0 {
-                self.health = min(100, (maxCap * 100) / self.designCapacity)
+            if self.designCapacity > 0 && actualMaxCap > 0 {
+                self.health = min(100, (actualMaxCap * 100) / self.designCapacity)
             }
 
             if let temp = dict["Temperature"] as? Int {
