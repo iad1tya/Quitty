@@ -23,7 +23,6 @@
 | **Graceful & Force Quit** | Hold `⌥ Option` on any app to force-quit instead of gracefully quitting. |
 | **Launch at Login** | Integrates with macOS login items to start silently on boot. |
 
----
 
 ## Installation
 
@@ -43,7 +42,6 @@ Quitty is not signed with an Apple Developer certificate, so macOS Gatekeeper ma
    ```
 3. Launch Quitty normally.
 
----
 
 ## Building from Source
 
@@ -57,13 +55,11 @@ git clone https://github.com/iad1tya/Quitty.git
 2. Select your Mac as the build destination.
 3. Press `⌘ R` to build and run.
 
----
 
 ## Contributing
 
 Issues, pull requests, and feature suggestions are welcome. Open an issue or submit a PR to get started.
 
----
 
 ## Support the Project
   <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140"/></a>
