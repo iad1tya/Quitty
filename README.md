@@ -50,7 +50,7 @@ Quitty is not signed with an Apple Developer certificate, so macOS Gatekeeper ma
 **Requirements:** Xcode 14+, macOS 14.6+ (Sonoma or Sequoia)
 
 ```bash
-git clone https://github.com/USERNAME/Quitty.git
+git clone https://github.com/iad1tya/Quitty.git
 ```
 
 1. Open `Bye.xcodeproj` in Xcode.
