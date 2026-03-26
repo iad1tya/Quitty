@@ -1,3 +1,7 @@
+<p>
+  <img src="assets/icon.png" alt="Quitty" width="100" height="100">
+</p>
+
 # Quitty
 
 **A macOS system optimization and cleanup utility.**
@@ -19,41 +23,69 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 ## Features
 
 ### System Dashboard
+<p>
+  <img src="assets/systemdashboard.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Live CPU, RAM, disk, and battery statistics
 - Visual charts and graphs for system metrics
 - Smart recommendations for optimization
 - One-click access to all tools
 
 ### System Cleaning
+<p>
+  <img src="assets/systemcleaning.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Removes temporary files, caches, logs, and system junk
 - Trash manager across all volumes and user accounts
 - Smart detection to identify only safe-to-delete files
 - Configurable categories for granular control
 
 ### File Management
+<p>
+  <img src="assets/filemanagment.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Duplicate file finder with full-system scan support
 - Large files scanner with detailed size analysis
 - Visual disk space map with interactive directory browsing
 - Preview before deletion with file recovery options
 
 ### Performance Optimization
+<p>
+  <img src="assets/performance.png" alt="Quitty" width="500" height="350">
+</p>
+
 - RAM booster to free memory by terminating unnecessary processes
 - Real-time CPU monitoring with per-process breakdown
 - Startup manager to control login items
 - Battery health monitoring and power usage tracking
 
 ### Network Monitoring
+<p>
+  <img src="assets/Network.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Real-time upload and download speed tracking
 - Per-application bandwidth usage
 - Active connection analysis
 
 ### Automation and Scheduling
+<p>
+  <img src="assets/automation.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Task scheduler for cleaning and optimization routines
 - Daily, weekly, and monthly recurrence options
 - Idle-time scheduling to minimize disruption
 - Notifications on task completion
 
 ### Advanced Tools
+<p>
+  <img src="assets/uninstall.png" alt="Quitty" width="500" height="350">
+</p>
+
 - Full app uninstaller with leftover file detection
 - Process manager for viewing and controlling running processes
 - Detailed hardware and software system information
