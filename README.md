@@ -6,7 +6,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://developer.apple.com/macos/)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/iad1tya/Quitty/releases)
 
-[Download DMG](https://github.com/iad1tya/Quitty/releases/download/v1.0.0/Quitty-1.0.0.dmg) &nbsp;|&nbsp; [Report Issues](https://github.com/iad1tya/Quitty/issues) &nbsp;|&nbsp; [Discussions](https://github.com/iad1tya/Quitty/discussions)
+[Download DMG](https://github.com/iad1tya/Quitty/releases) &nbsp;|&nbsp; [Report Issues](https://github.com/iad1tya/Quitty/issues) &nbsp;|&nbsp; [Discussions](https://github.com/iad1tya/Quitty/discussions)
 
 ---
 
