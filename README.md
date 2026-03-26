@@ -3,8 +3,6 @@
 
 <div align="center">
 
-![Quitty Logo](assets/icon.png)
-
 **The ultimate macOS system optimization and cleanup utility**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
