@@ -1,84 +1,77 @@
-<p align="center">
-  <img src="assets/banner.png" alt="# Quitty - macOS System Optimization Utility
+# Quitty
 
-<div align="center">
-
-**The ultimate macOS system optimization and cleanup utility**
+**A macOS system optimization and cleanup utility.**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://developer.apple.com/macos/)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/iad1tya/Quitty/releases)
 
-[Download DMG](https://github.com/iad1tya/Quitty/releases/download/v1.0.0/Quitty-1.0.0.dmg) • [Install via Homebrew](#installation) • [Report Issues](https://github.com/iad1tya/Quitty/issues)
+[Download DMG](https://github.com/iad1tya/Quitty/releases/download/v1.0.0/Quitty-1.0.0.dmg) &nbsp;|&nbsp; [Report Issues](https://github.com/iad1tya/Quitty/issues) &nbsp;|&nbsp; [Discussions](https://github.com/iad1tya/Quitty/discussions)
 
-</div>
+---
 
-## ✨ Features
+## Overview
 
-Quitty is a powerful, all-in-one macOS optimization tool that helps you keep your Mac running at peak performance. With a beautiful and intuitive interface, Quitty provides comprehensive system management tools in one convenient application.
+Quitty is an all-in-one macOS utility for system maintenance, performance optimization, and storage management. It provides real-time monitoring, automated cleaning, and advanced tools through a single, unified interface.
 
-### 🚀 **System Dashboard**
-- **Real-time Monitoring**: Live CPU, RAM, disk space, and battery health statistics
-- **Quick Actions**: One-click access to all optimization tools
-- **Visual Analytics**: Beautiful charts and graphs for system metrics
-- **Smart Recommendations**: AI-powered suggestions for system optimization
+---
 
-### 🧹 **System Cleaning**
-- **Junk Cleaner**: Removes temporary files, cache, logs, and system junk
-- **Trash Manager**: Empty trash from all volumes and user accounts
-- **Smart Detection**: Identifies and removes only safe-to-delete files
-- **Customizable Categories**: Choose what to clean with detailed file type selection
+## Features
 
-### 🔍 **File Management**
-- **Duplicate Finder**: Scans for duplicate files across your entire system
-- **Large Files Scanner**: Find space-hogging files with detailed size analysis
-- **Space Lens**: Visual disk space usage with interactive directory maps
-- **Safe Deletion**: Preview before deleting with file recovery options
+### System Dashboard
+- Live CPU, RAM, disk, and battery statistics
+- Visual charts and graphs for system metrics
+- Smart recommendations for optimization
+- One-click access to all tools
 
-### ⚡ **Performance Optimization**
-- **RAM Booster**: Frees up memory by terminating unnecessary processes
-- **CPU Monitor**: Track CPU usage and identify resource-heavy applications
-- **Startup Manager**: Control which apps launch at startup
-- **Battery Health**: Monitor battery status and optimize power usage
+### System Cleaning
+- Removes temporary files, caches, logs, and system junk
+- Trash manager across all volumes and user accounts
+- Smart detection to identify only safe-to-delete files
+- Configurable categories for granular control
 
-### 📊 **Network & Connectivity**
-- **Network Monitor**: Real-time network speed and data usage tracking
-- **Connection Analysis**: Monitor active connections and network processes
-- **Bandwidth Usage**: Track data consumption by application
+### File Management
+- Duplicate file finder with full-system scan support
+- Large files scanner with detailed size analysis
+- Visual disk space map with interactive directory browsing
+- Preview before deletion with file recovery options
 
-### ⏰ **Automation & Scheduling**
-- **Task Scheduler**: Automate cleaning and optimization tasks
-- **Smart Timing**: Schedule tasks during idle periods
-- **Notification System**: Get alerts when tasks complete
-- **Recurring Tasks**: Set up daily, weekly, or monthly maintenance
+### Performance Optimization
+- RAM booster to free memory by terminating unnecessary processes
+- Real-time CPU monitoring with per-process breakdown
+- Startup manager to control login items
+- Battery health monitoring and power usage tracking
 
-### 🛠️ **Advanced Tools**
-- **App Uninstaller**: Completely remove applications and their leftovers
-- **Process Manager**: View and manage running processes
-- **System Information**: Detailed hardware and software information
-- **Storage Analyzer**: Deep dive into disk usage patterns
+### Network Monitoring
+- Real-time upload and download speed tracking
+- Per-application bandwidth usage
+- Active connection analysis
 
-## 🚀 Installation
+### Automation and Scheduling
+- Task scheduler for cleaning and optimization routines
+- Daily, weekly, and monthly recurrence options
+- Idle-time scheduling to minimize disruption
+- Notifications on task completion
 
-### Option 1: Direct Download (Recommended)
-1. Download the latest DMG from [Releases](https://github.com/iad1tya/Quitty/releases)
-2. Mount the DMG file
-3. Drag Quitty.app to your Applications folder
-4. Launch Quitty from Applications
+### Advanced Tools
+- Full app uninstaller with leftover file detection
+- Process manager for viewing and controlling running processes
+- Detailed hardware and software system information
+- Storage analyzer with file type breakdown and growth tracking
 
-### Option 2: Homebrew
-```bash
-# Install Homebrew (if not already installed)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+---
 
-# Install Quitty
-brew install quitty
+## Installation
 
-# Run Quitty
-open /Applications/Quitty.app
-```
+### Option 1: DMG (Recommended)
 
-### Option 3: Build from Source
+1. Download the latest DMG from [Releases](https://github.com/iad1tya/Quitty/releases).
+2. Mount the DMG file.
+3. Drag `Quitty.app` to your Applications folder.
+4. Launch Quitty from Applications.
+
+### Option 2: Build from Source
+
 ```bash
 # Clone the repository
 git clone https://github.com/iad1tya/Quitty.git
@@ -91,152 +84,105 @@ xcodebuild -project Bye.xcodeproj -scheme Quitty -configuration Release
 cp -R "/Users/$(whoami)/Library/Developer/Xcode/DerivedData/Bye-*/Build/Products/Release/Quitty.app" /Applications/
 ```
 
-## 📖 Usage Guide
+---
+
+## Usage
 
 ### Getting Started
 
-1. **Launch Quitty**: Open the app from your Applications folder
-2. **Dashboard Overview**: The main dashboard shows your system's current status
-3. **Navigation**: Use the sidebar to access different features
-4. **Quick Actions**: One-click buttons for common tasks
+1. Open Quitty from your Applications folder.
+2. The dashboard displays your system's current health and stats.
+3. Use the sidebar to navigate between features.
 
-### Dashboard Features
+### Dashboard
 
-#### System Stats Cards
-- **RAM Usage**: Shows current memory usage with percentage and used/total values
-- **CPU Usage**: Real-time CPU monitoring with active process count
-- **Disk Space**: Storage usage with free space indicator
-- **Battery Health**: Battery percentage and cycle count (on supported Macs)
+The main dashboard provides four status cards — RAM, CPU, Disk, and Battery — alongside quick action buttons for the most common tasks:
 
-#### Quick Actions
-- **Clean Junk**: Removes system junk files and temporary data
-- **Empty Trash**: Empties trash from all mounted volumes
-- **Free RAM**: Frees up memory by terminating unnecessary processes
-- **Find Duplicates**: Starts duplicate file scanning
-- **Large Files**: Scans for large files taking up disk space
-- **Quit All Apps**: Safely closes non-essential applications
+| Quick Action | Description |
+|---|---|
+| Clean Junk | Removes system and app cache, logs, and temp files |
+| Empty Trash | Empties trash across all mounted volumes |
+| Free RAM | Terminates unnecessary processes to free memory |
+| Find Duplicates | Initiates a full duplicate file scan |
+| Large Files | Scans for files above a configurable size threshold |
+| Quit All Apps | Safely closes non-essential applications |
 
 ### System Cleaning
 
-#### Junk Cleaner
-1. Navigate to **System Junk** in the sidebar
-2. Review the detected junk categories:
-   - **System Cache**: Application cache files
-   - **User Cache**: User-specific cache data
-   - **Log Files**: System and application logs
-   - **Temporary Files**: Various temporary data
-3. Select categories to clean
-4. Click **Clean Selected** to remove junk
+1. Navigate to **System Junk** in the sidebar.
+2. Review detected categories: System Cache, User Cache, Log Files, Temporary Files.
+3. Select the categories you want to clean.
+4. Click **Clean Selected**.
 
-#### Trash Manager
-1. Go to **Trash Bins** in the sidebar
-2. View trash from different volumes and users
-3. Select which trash bins to empty
-4. Click **Empty Selected** to clear trash
+### Duplicate Finder
 
-### File Management
+1. Navigate to **Duplicates** in the sidebar.
+2. Choose a scan location (full system or a specific folder).
+3. Click **Start Scan**.
+4. Review results and select files to remove. Use **Smart Selection** to retain the newest version automatically.
 
-#### Duplicate Finder
-1. Click **Duplicates** in the sidebar
-2. Choose scan location (entire system or specific folders)
-3. Click **Start Scan** to find duplicates
-4. Review results and select files to remove
-5. Use **Smart Selection** to keep newest versions
+### Large Files Scanner
 
-#### Large Files Scanner
-1. Navigate to **Large Files** in the sidebar
-2. Set minimum file size threshold
-3. Select scan location
-4. Review large files and delete unwanted ones
+1. Navigate to **Large Files** in the sidebar.
+2. Set a minimum file size threshold.
+3. Select a scan location and review results.
 
-### Performance Tools
+### RAM Booster
 
-#### RAM Booster
-1. Go to **RAM Booster** in the sidebar
-2. View current RAM usage breakdown
-3. Click **Free RAM** to optimize memory
-4. Monitor the freed memory amount
+1. Navigate to **RAM Booster** in the sidebar.
+2. Review the current memory breakdown.
+3. Click **Free RAM** to reclaim memory.
 
-#### CPU Monitor
-1. Click **CPU & Temp** in the sidebar
-2. View real-time CPU usage
-3. Monitor top CPU-consuming processes
-4. Track CPU temperature (on supported Macs)
+### Task Scheduler
 
-#### Battery Monitor
-1. Navigate to **Battery** in the sidebar
-2. View battery health percentage
-3. Monitor power consumption
-4. Check battery cycle count and condition
+1. Navigate to **Scheduler** in the sidebar.
+2. Create a new task (Clean Junk, Empty Trash, Free RAM, or Find Duplicates).
+3. Set the frequency and notification preferences.
 
-### Automation
+---
 
-#### Task Scheduler
-1. Go to **Scheduler** in the sidebar
-2. Create new scheduled tasks:
-   - **Clean Junk**: Automatic junk cleaning
-   - **Empty Trash**: Regular trash emptying
-   - **Free RAM**: Memory optimization
-   - **Find Duplicates**: Periodic duplicate scanning
-3. Set frequency (daily, weekly, monthly)
-4. Configure notification preferences
+## Configuration
 
-## ⚙️ Configuration
+Access settings via **Settings...** in the menu bar or from the sidebar.
 
-### Settings
-Access settings by clicking **Settings...** in the menu bar or from the sidebar.
+| Setting | Description |
+|---|---|
+| Launch at Login | Start Quitty automatically on system startup |
+| Background Monitoring | Keep system stats active while the app is in the background |
+| Update Frequency | Control how often stats refresh |
+| Safe Mode | Restrict cleaning to verified safe-to-delete files only |
+| Custom Exclusions | Exclude specific files or folders from cleaning operations |
+| Backup Options | Create backups before deletion |
+| Notifications | Configure alerts for task completion and system warnings |
 
-#### General Settings
-- **Launch at Login**: Start Quitty automatically
-- **Background Monitoring**: Enable system monitoring
-- **Update Frequency**: Set data refresh intervals
+---
 
-#### Cleaning Preferences
-- **Safe Mode**: Only remove safe-to-delete files
-- **Custom Exclusions**: Add files/folders to exclude
-- **Backup Options**: Create backups before deletion
+## System Requirements
 
-#### Notifications
-- **Task Completion**: Get notified when tasks finish
-- **System Alerts**: Receive system health warnings
-- **Sound Effects**: Enable/disable notification sounds
+| Requirement | Minimum |
+|---|---|
+| macOS | 14.6 (Sonoma) or later |
+| Memory | 4 GB RAM (8 GB recommended) |
+| Storage | 500 MB free space |
+| Processor | Apple Silicon or Intel |
 
-## 🔧 Advanced Features
+---
 
-### App Uninstaller
-- **Complete Removal**: Uninstall apps with all associated files
-- **Leftover Detection**: Find and remove app leftovers
-- **Bundle Analysis**: See what files belong to each app
+## Privacy and Safety
 
-### Storage Analysis
-- **Visual Maps**: Interactive disk usage visualization
-- **File Type Breakdown**: See which file types use most space
-- **Growth Tracking**: Monitor storage usage over time
+- Quitty collects no data and includes no telemetry.
+- All operations are performed locally on your device.
+- Safe Mode ensures only verified junk files are targeted.
+- Backups can be created automatically before any destructive operation.
 
-### Network Monitoring
-- **Real-time Speed**: Monitor upload/download speeds
-- **Data Usage**: Track data consumption by app
-- **Connection Info**: View active network connections
+---
 
-## 🛡️ Safety & Privacy
+## Contributing
 
-- **Safe Cleaning**: Only removes files that are safe to delete
-- **Backup Creation**: Automatically creates backups before major operations
-- **Privacy Respecting**: No data collection or telemetry
-- **Local Processing**: All operations happen on your device
-
-## 📋 System Requirements
-
-- **macOS**: 14.6 (Sonoma) or later
-- **Memory**: 4GB RAM minimum (8GB recommended)
-- **Storage**: 500MB free space for installation
-- **Processor**: Apple Silicon or Intel Mac
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ### Development Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/iad1tya/Quitty.git
@@ -245,45 +191,34 @@ cd Quitty
 # Open in Xcode
 open Bye.xcodeproj
 
-# Build and run
+# Build and run (Debug)
 xcodebuild -project Bye.xcodeproj -scheme Quitty -configuration Debug
 ```
 
-## 📝 Changelog
+---
 
-See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes.
-
-## 🐛 Bug Reports & Feature Requests
+## Bug Reports and Feature Requests
 
 - **Bug Reports**: [File an issue](https://github.com/iad1tya/Quitty/issues/new?template=bug_report.md)
 - **Feature Requests**: [Suggest a feature](https://github.com/iad1tya/Quitty/issues/new?template=feature_request.md)
 - **Questions**: [Start a discussion](https://github.com/iad1tya/Quitty/discussions)
 
-## 📄 License
+---
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Changelog
 
-## 🙏 Acknowledgments
-
-- **Apple**: For the macOS platform and development tools
-- **SwiftUI Community**: For inspiration and best practices
-- **Open Source Contributors**: For making this project possible
-
-## 🔗 Links
-
-- **Website**: [https://quitty.iad1tya.cyou](https://quitty.iad1tya.cyou)
-- **Documentation**: [Wiki](https://github.com/iad1tya/Quitty/wiki)
-- **Twitter**: [@xad1tya](https://x.com/xad1tya)
+See [CHANGELOG.md](CHANGELOG.md) for a full history of changes.
 
 ---
 
-## Support the Project
-  <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140"/></a>
-  &nbsp;
-  <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav&am=&tn=Thank%20You"><img src="assets/upi.svg" width="100"/></a>
-</div>
-
-</div>
-
 ## License
-Quitty is open-source and free to use.
+
+Quitty is open-source software licensed under the [MIT License](LICENSE).
+
+---
+
+## Links
+
+- Website: [https://quitty.iad1tya.cyou](https://quitty.iad1tya.cyou)
+- Documentation: [Wiki](https://github.com/iad1tya/Quitty/wiki)
+- Twitter: [@xad1tya](https://x.com/xad1tya)
