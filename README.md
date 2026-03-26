@@ -217,6 +217,14 @@ Quitty is open-source software licensed under the [MIT License](LICENSE).
 
 ---
 
+## Support the Project
+  <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140"/></a>
+  &nbsp;
+  <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav&am=&tn=Thank%20You"><img src="assets/upi.svg" width="100"/></a>
+</div>
+
+---
+
 ## Links
 
 - Website: [https://quitty.iad1tya.cyou](https://quitty.iad1tya.cyou)
