@@ -57,12 +57,6 @@
 - Configurable display options
 - Auto-refresh every 2 seconds
 
-#### Keyboard Shortcuts
-- ⌘⇧Q: Quit All Apps
-- ⌘⇧R: Free RAM
-- ⌘⇧T: Empty Trash
-- ⌘⇧K: Quick Actions (reserved)
-
 #### Settings
 - Reorganized into 5 tabs: General, Safe List, Presets, Shortcuts, About
 - Added menu bar stats configuration
