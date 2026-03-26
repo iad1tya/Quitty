@@ -1,6 +1,6 @@
-<p>
-  <img src="assets/icon.png" alt="Quitty" width="100" height="100">
-</p>
+<div align="center">
+
+<img src="assets/icon.png" alt="Quitty" width="100" height="100">
 
 # Quitty
 
@@ -11,6 +11,8 @@
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/iad1tya/Quitty/releases)
 
 [Download DMG](https://github.com/iad1tya/Quitty/releases) &nbsp;|&nbsp; [Report Issues](https://github.com/iad1tya/Quitty/issues) &nbsp;|&nbsp; [Discussions](https://github.com/iad1tya/Quitty/discussions)
+
+</div>
 
 ---
 
@@ -23,8 +25,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 ## Features
 
 ### System Dashboard
+
 <p>
-  <img src="assets/systemdashboard.png" alt="Quitty" width="500" height="350">
+  <img src="assets/systemdashboard.png" alt="System Dashboard" width="500" height="350">
 </p>
 
 - Live CPU, RAM, disk, and battery statistics
@@ -33,8 +36,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - One-click access to all tools
 
 ### System Cleaning
+
 <p>
-  <img src="assets/systemcleaning.png" alt="Quitty" width="500" height="350">
+  <img src="assets/systemcleaning.png" alt="System Cleaning" width="500" height="350">
 </p>
 
 - Removes temporary files, caches, logs, and system junk
@@ -43,8 +47,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - Configurable categories for granular control
 
 ### File Management
+
 <p>
-  <img src="assets/filemanagment.png" alt="Quitty" width="500" height="350">
+  <img src="assets/filemanagment.png" alt="File Management" width="500" height="350">
 </p>
 
 - Duplicate file finder with full-system scan support
@@ -53,8 +58,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - Preview before deletion with file recovery options
 
 ### Performance Optimization
+
 <p>
-  <img src="assets/performance.png" alt="Quitty" width="500" height="350">
+  <img src="assets/performance.png" alt="Performance Optimization" width="500" height="350">
 </p>
 
 - RAM booster to free memory by terminating unnecessary processes
@@ -63,8 +69,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - Battery health monitoring and power usage tracking
 
 ### Network Monitoring
+
 <p>
-  <img src="assets/Network.png" alt="Quitty" width="500" height="350">
+  <img src="assets/Network.png" alt="Network Monitoring" width="500" height="350">
 </p>
 
 - Real-time upload and download speed tracking
@@ -72,8 +79,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - Active connection analysis
 
 ### Automation and Scheduling
+
 <p>
-  <img src="assets/automation.png" alt="Quitty" width="500" height="350">
+  <img src="assets/automation.png" alt="Automation and Scheduling" width="500" height="350">
 </p>
 
 - Task scheduler for cleaning and optimization routines
@@ -82,8 +90,9 @@ Quitty is an all-in-one macOS utility for system maintenance, performance optimi
 - Notifications on task completion
 
 ### Advanced Tools
+
 <p>
-  <img src="assets/uninstall.png" alt="Quitty" width="500" height="350">
+  <img src="assets/uninstall.png" alt="Advanced Tools" width="500" height="350">
 </p>
 
 - Full app uninstaller with leftover file detection
@@ -115,6 +124,23 @@ xcodebuild -project Bye.xcodeproj -scheme Quitty -configuration Release
 # Copy to Applications
 cp -R "/Users/$(whoami)/Library/Developer/Xcode/DerivedData/Bye-*/Build/Products/Release/Quitty.app" /Applications/
 ```
+
+---
+
+## Xcode/Gatekeeper Blocked?
+
+Because Quitty hasn't been signed with a paid Apple Developer certificate, macOS Gatekeeper may block it from running the first time.
+
+**To bypass Gatekeeper securely:**
+
+1. Open the Terminal app — press `Cmd + Space`, type **Terminal**, and hit Enter.
+2. Run the following command:
+
+```bash
+xattr -rd com.apple.quarantine /Applications/Quitty.app
+```
+
+3. You can now launch Quitty normally.
 
 ---
 
@@ -250,8 +276,10 @@ Quitty is open-source software licensed under the [MIT License](LICENSE).
 ---
 
 ## Support the Project
+
+<div>
   <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140"/></a>
-  &nbsp;
+  &nbsp;&nbsp;
   <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav&am=&tn=Thank%20You"><img src="assets/upi.svg" width="100"/></a>
 </div>
 
@@ -259,6 +287,8 @@ Quitty is open-source software licensed under the [MIT License](LICENSE).
 
 ## Links
 
-- Website: [https://quitty.iad1tya.cyou](https://quitty.iad1tya.cyou)
-- Documentation: [Wiki](https://github.com/iad1tya/Quitty/wiki)
-- Twitter: [@xad1tya](https://x.com/xad1tya)
+<div>
+
+[Website](https://quitty.iad1tya.cyou) &nbsp;|&nbsp; [Documentation](https://github.com/iad1tya/Quitty/wiki) &nbsp;|&nbsp; [@xad1tya](https://x.com/xad1tya)
+
+</div>
