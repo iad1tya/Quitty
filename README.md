@@ -4,11 +4,13 @@
 <div align="center">
 
 # Quitty
-**Quitty** is a lightweight macOS menu bar utility for power users. Monitor application memory in real time, manage running processes, and terminate apps instantly — all from a clean, native SwiftUI interface.
+**Quitty** is a powerful macOS system utility for power users. Monitor RAM, clean junk, find duplicates, manage startup items, track battery health, and visualize disk usage — all from a clean, native SwiftUI interface with sidebar navigation.
 
 </div>
 
 ## Features
+
+### Core — Process Manager
 | Feature | Description |
 |---|---|
 | **Launch at Login** | Integrates with macOS login items to start silently on boot. |
@@ -17,6 +19,27 @@
 | **Advanced Filtering** | Search bar to quickly locate specific processes across all open apps. |
 | **Safe List (Whitelist)** | Protect apps from being closed when using "Quit All." |
 | **Background Process Visibility** | Reveal and manage hidden menu bar extensions and daemons. |
+
+### System Junk Cleaner
+Scans and removes cached files, logs, crash reports, Xcode DerivedData, and old downloads from `~/Library`. Shows breakdown by category with selective cleaning.
+
+### Trash Bins
+Shows current Trash size and file count. One-click "Empty Trash" via Finder automation. Requires Full Disk Access permission (prompted automatically).
+
+### Space Lens
+Visual disk usage analyzer with drill-down navigation. Displays directory sizes as proportional bars with color coding. Navigate into folders to find what's eating your disk space.
+
+### Duplicate Finder
+Two-pass scan: groups files by size, then compares SHA-256 hashes. Animated progress with cancel support. Configurable minimum file size (100KB–50MB). Select duplicates and move to Trash.
+
+### Optimization
+Manage Launch Agents — toggle enable/disable for user agents, view system agents. Shows app icons and human-readable descriptions for known services (Steam, Spotify, Adobe, Docker, etc.). Monitor and terminate heavy processes by CPU/memory usage.
+
+### RAM Booster
+Real-time RAM usage with circular gauge. Shows active, wired, compressed, and free memory via `host_statistics64()`. "Free RAM" terminates hidden high-memory apps and clears system caches.
+
+### Battery Monitor
+Battery charge, health percentage, cycle count, temperature, and charging status via IOKit. Circular gauge with color-coded thresholds. Shows time remaining and power source.
 
 ## Installation
 
