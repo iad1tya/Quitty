@@ -128,6 +128,13 @@ struct SpaceLensView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(.secondary)
+                
+                Button(action: { exportReport() }) {
+                    Label("Export", systemImage: "square.and.arrow.up")
+                        .font(.system(size: 12))
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.secondary)
 
                 Spacer()
 
@@ -143,6 +150,24 @@ struct SpaceLensView: View {
                 analyzer.scan()
             }
         }
+    }
+    
+    private func exportReport() {
+        var rows: [[String]] = []
+        for item in analyzer.items {
+            rows.append([
+                item.name,
+                item.isDirectory ? "Folder" : "File",
+                StorageAnalyzer.formatBytes(item.size),
+                item.path.path
+            ])
+        }
+        
+        ReportExporter.shared.exportCSV(
+            title: "Space Lens Report",
+            headers: ["Name", "Type", "Size", "Path"],
+            rows: rows
+        )
     }
 }
 

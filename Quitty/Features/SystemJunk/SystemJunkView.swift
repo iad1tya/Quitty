@@ -109,6 +109,13 @@ struct SystemJunkView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary)
+                    
+                    Button(action: { exportReport() }) {
+                        Label("Export", systemImage: "square.and.arrow.up")
+                            .font(.system(size: 12))
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundColor(.secondary)
 
                     Spacer()
 
@@ -138,5 +145,22 @@ struct SystemJunkView: View {
         } message: {
             Text("This will permanently delete \(SystemJunkManager.formatBytes(manager.selectedSize)) of junk files. This cannot be undone.")
         }
+    }
+    
+    private func exportReport() {
+        var rows: [[String]] = []
+        for category in manager.categories {
+            rows.append([
+                category.name,
+                "\(category.files.count)",
+                SystemJunkManager.formatBytes(category.size)
+            ])
+        }
+        
+        ReportExporter.shared.exportCSV(
+            title: "System Junk Report",
+            headers: ["Category", "Items", "Size"],
+            rows: rows
+        )
     }
 }

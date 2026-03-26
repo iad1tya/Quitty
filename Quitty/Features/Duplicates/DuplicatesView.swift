@@ -185,6 +185,13 @@ struct DuplicatesView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.secondary)
+                    
+                    Button(action: { exportReport() }) {
+                        Label("Export", systemImage: "square.and.arrow.up")
+                            .font(.system(size: 12))
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundColor(.secondary)
 
                     Spacer()
 
@@ -218,6 +225,26 @@ struct DuplicatesView: View {
         } message: {
             Text("\(finder.selectedCount) files (\(DuplicateFinderManager.formatBytes(finder.selectedSize))) will be moved to Trash.")
         }
+    }
+    
+    private func exportReport() {
+        var rows: [[String]] = []
+        for group in finder.groups {
+            for file in group.files {
+                rows.append([
+                    file.name,
+                    DuplicateFinderManager.formatBytes(file.size),
+                    file.path.path,
+                    group.hash
+                ])
+            }
+        }
+        
+        ReportExporter.shared.exportCSV(
+            title: "Duplicate Files Report",
+            headers: ["Name", "Size", "Path", "Hash"],
+            rows: rows
+        )
     }
 }
 

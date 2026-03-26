@@ -66,8 +66,12 @@ class OptimizationManager: ObservableObject {
     @Published var isScanning = false
 
     func scan() {
+        guard !isScanning else { return }
+        
         isScanning = true
-        DispatchQueue.global(qos: .userInitiated).async {
+        
+        // Add timeout to prevent infinite loading
+        let workItem = DispatchWorkItem {
             let agents = self.scanLaunchAgents()
             let processes = self.getHeavyProcesses()
 
@@ -76,6 +80,17 @@ class OptimizationManager: ObservableObject {
                 self.heavyProcesses = processes
                 self.isScanning = false
             }
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.1, execute: workItem)
+        
+        // Timeout after 10 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10) {
+            if workItem.isCancelled {
+                return
+            }
+            workItem.cancel()
+            self.isScanning = false
         }
     }
 

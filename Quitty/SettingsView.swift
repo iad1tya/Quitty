@@ -15,23 +15,30 @@ struct SettingsView: View {
                     Label("Safe List", systemImage: "shield.fill")
                 }
             
+            UpdatesSettingsView()
+                .tabItem {
+                    Label("Updates", systemImage: "arrow.down.circle")
+                }
+            
             AboutSettingsView()
                 .tabItem {
                     Label("About", systemImage: "info.circle")
                 }
         }
-        .frame(width: 450)
+        .frame(width: 500)
     }
 }
 
 struct GeneralSettingsView: View {
     @StateObject private var launchHelper = LaunchHelper.shared
-    @StateObject private var updater = UpdateChecker()
-    @AppStorage("showBackgroundApps") private var showBackgroundApps = false
+    @AppStorage("enableNotifications") private var enableNotifications = true
+    @AppStorage("notifyLowDiskSpace") private var notifyLowDiskSpace = true
+    @AppStorage("notifyHighRAM") private var notifyHighRAM = true
+    @AppStorage("notifyBatteryHealth") private var notifyBatteryHealth = true
     
     var body: some View {
         Form {
-            Section {
+            Section("Startup") {
                 Toggle("Start Quitty when I log in", isOn: $launchHelper.isLaunchAtLoginEnabled)
                     .toggleStyle(.checkbox)
                     .onChange(of: launchHelper.isLaunchAtLoginEnabled) { oldValue, newValue in
@@ -41,30 +48,22 @@ struct GeneralSettingsView: View {
                 Text("Show Quitty in the menu bar automatically when your computer starts.")
                     .font(.caption)
                     .foregroundColor(.secondary)
-                    
-                Toggle("Show Menu Bar & Background Apps", isOn: $showBackgroundApps)
-                    .toggleStyle(.checkbox)
-                
-                Text("Advanced: Display utilities and helpers that run in the background.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
             
-            Section {
-                Button(action: {
-                    updater.checkForUpdates()
-                }) {
-                    HStack {
-                        Text(updater.isChecking ? "Checking for Updates..." : "Check for Updates")
-                        if updater.isChecking {
-                            Spacer()
-                            ProgressView().controlSize(.small)
-                        }
+            Section("Notifications") {
+                Toggle("Enable Notifications", isOn: $enableNotifications)
+                    .toggleStyle(.checkbox)
+                
+                if enableNotifications {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Toggle("Low Disk Space Alerts", isOn: $notifyLowDiskSpace)
+                            .toggleStyle(.checkbox)
+                        Toggle("High RAM Usage Alerts", isOn: $notifyHighRAM)
+                            .toggleStyle(.checkbox)
+                        Toggle("Battery Health Warnings", isOn: $notifyBatteryHealth)
+                            .toggleStyle(.checkbox)
                     }
-                }
-                .disabled(updater.isChecking)
-                .alert(isPresented: $updater.showingAlert) {
-                    Alert(title: Text(updater.alertTitle), message: Text(updater.alertMessage), dismissButton: .default(Text("OK")))
+                    .padding(.leading, 20)
                 }
             }
             
@@ -78,7 +77,7 @@ struct GeneralSettingsView: View {
         }
         .formStyle(.grouped)
         .padding()
-        .frame(height: 300)
+        .frame(height: 500)
     }
 }
 
@@ -87,6 +86,15 @@ class UpdateChecker: ObservableObject {
     @Published var showingAlert = false
     @Published var alertTitle = ""
     @Published var alertMessage = ""
+    @Published var currentVersion = ""
+    @Published var latestVersion = ""
+    @Published var isUpdateAvailable = false
+    @Published var updateURL = "https://quitty.iad1tya.cyou"
+    @Published var releaseNotes = ""
+    
+    init() {
+        currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0"
+    }
     
     func checkForUpdates() {
         isChecking = true
@@ -105,17 +113,20 @@ class UpdateChecker: ObservableObject {
                     return
                 }
                 
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: String],
-                   let remoteVersion = json["version"] {
-                    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let remoteVersion = json["version"] as? String {
+                    self.latestVersion = remoteVersion
+                    self.releaseNotes = json["notes"] as? String ?? ""
                     
-                    if remoteVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-                        if let url = URL(string: "https://quitty.iad1tya.cyou") {
-                            NSWorkspace.shared.open(url)
-                        }
+                    if remoteVersion.compare(self.currentVersion, options: .numeric) == .orderedDescending {
+                        self.isUpdateAvailable = true
+                        self.alertTitle = "Update Available"
+                        self.alertMessage = "Version \(remoteVersion) is available. You're running \(self.currentVersion)."
+                        self.showingAlert = true
                     } else {
+                        self.isUpdateAvailable = false
                         self.alertTitle = "Up to Date"
-                        self.alertMessage = "Quitty is on the latest version (\\(currentVersion))."
+                        self.alertMessage = "Quitty is on the latest version (\(self.currentVersion))."
                         self.showingAlert = true
                     }
                 } else {
@@ -125,6 +136,12 @@ class UpdateChecker: ObservableObject {
                 }
             }
         }.resume()
+    }
+    
+    func openDownloadPage() {
+        if let url = URL(string: updateURL) {
+            NSWorkspace.shared.open(url)
+        }
     }
 }
 
@@ -208,6 +225,10 @@ struct SafeListSettingsView: View {
 }
 
 struct AboutSettingsView: View {
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "2.0"
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: 6) {
@@ -215,7 +236,7 @@ struct AboutSettingsView: View {
                     .font(.system(size: 32, weight: .bold))
                     .foregroundColor(.primary)
                 
-                Text("Version 1.0")
+                Text("Version \(appVersion)")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundColor(.secondary)
                     .padding(.horizontal, 8)
@@ -291,3 +312,147 @@ struct LinkRow: View {
         }
     }
 }
+
+
+struct UpdatesSettingsView: View {
+    @StateObject private var updater = UpdateChecker()
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            // Current Version
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Current Version")
+                        .font(.headline)
+                    Text("v\(updater.currentVersion)")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.blue)
+                }
+                
+                Spacer()
+                
+                if updater.isUpdateAvailable {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("Update Available")
+                            .font(.caption)
+                            .foregroundColor(.green)
+                        Text("v\(updater.latestVersion)")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.green)
+                    }
+                }
+            }
+            .padding()
+            .background(Color.secondary.opacity(0.05))
+            .cornerRadius(8)
+            
+            // Check for Updates
+            Button(action: {
+                updater.checkForUpdates()
+            }) {
+                HStack {
+                    Image(systemName: "arrow.down.circle")
+                    Text(updater.isChecking ? "Checking for Updates..." : "Check for Updates")
+                    if updater.isChecking {
+                        Spacer()
+                        ProgressView().controlSize(.small)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(updater.isChecking)
+            
+            if updater.isUpdateAvailable {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Update Available")
+                        .font(.headline)
+                    
+                    if !updater.releaseNotes.isEmpty {
+                        Text(updater.releaseNotes)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .padding()
+                            .background(Color.secondary.opacity(0.05))
+                            .cornerRadius(8)
+                    }
+                    
+                    Text("Download Options:")
+                        .font(.subheadline.bold())
+                    
+                    VStack(spacing: 8) {
+                        Button(action: {
+                            updater.openDownloadPage()
+                        }) {
+                            HStack {
+                                Image(systemName: "safari")
+                                Text("Download from Website")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        Button(action: {
+                            if let url = URL(string: "https://github.com/iad1tya/Quitty/releases") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }) {
+                            HStack {
+                                Image(systemName: "arrow.down.circle")
+                                Text("Download from GitHub")
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        Button(action: {
+                            let pasteboard = NSPasteboard.general
+                            pasteboard.clearContents()
+                            pasteboard.setString("brew install --cask quitty", forType: .string)
+                        }) {
+                            HStack {
+                                Image(systemName: "terminal")
+                                Text("Copy Homebrew Command")
+                                Spacer()
+                                Image(systemName: "doc.on.doc")
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+            }
+            
+            Divider()
+            
+            Text("Installation Methods")
+                .font(.headline)
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text("• Direct Download: Visit quitty.iad1tya.cyou")
+                    .font(.caption)
+                Text("• GitHub Releases: Download from releases page")
+                    .font(.caption)
+                Text("• Homebrew: brew install --cask quitty (coming soon)")
+                    .font(.caption)
+            }
+            .foregroundColor(.secondary)
+            
+            Spacer()
+        }
+        .padding()
+        .frame(height: 450)
+        .alert(isPresented: $updater.showingAlert) {
+            Alert(
+                title: Text(updater.alertTitle),
+                message: Text(updater.alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+    }
+}
+

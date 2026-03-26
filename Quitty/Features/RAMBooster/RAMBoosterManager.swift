@@ -17,6 +17,18 @@ class RAMBoosterManager: ObservableObject {
         guard totalRAM > 0 else { return 0 }
         return Double(usedRAM) / Double(totalRAM)
     }
+    
+    var usagePercentage: Double {
+        usagePercent * 100.0
+    }
+    
+    var totalMemoryFormatted: String {
+        Self.formatBytes(totalRAM)
+    }
+    
+    var usedMemoryFormatted: String {
+        Self.formatBytes(usedRAM)
+    }
 
     var pressureColor: Color {
         if usagePercent < 0.6 { return .green }

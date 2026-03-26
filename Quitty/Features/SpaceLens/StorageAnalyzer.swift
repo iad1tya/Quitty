@@ -21,6 +21,15 @@ class StorageAnalyzer: ObservableObject {
     @Published var totalDiskSize: UInt64 = 0
     @Published var usedDiskSize: UInt64 = 0
     @Published var freeDiskSize: UInt64 = 0
+    
+    var usagePercentage: Double {
+        guard totalDiskSize > 0 else { return 0 }
+        return Double(usedDiskSize) / Double(totalDiskSize) * 100.0
+    }
+    
+    var usagePercentageFormatted: String {
+        String(format: "%.1f%%", usagePercentage)
+    }
 
     init() {
         refreshDiskInfo()
