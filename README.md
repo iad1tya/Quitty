@@ -273,18 +273,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Website**: [https://iad1tya.github.io/Quitty](https://iad1tya.github.io/Quitty)
+- **Website**: [https://quitty.iad1tya.cyou](https://quitty.iad1tya.cyou)
 - **Documentation**: [Wiki](https://github.com/iad1tya/Quitty/wiki)
-- **Discord Community**: [Join our Discord](https://discord.gg/quitty)
-- **Twitter**: [@QuittyApp](https://twitter.com/QuittyApp)
+- **Twitter**: [@xad1tya](https://x.com/xad1tya)
 
 ---
 
-<div align="center">
-
-**Made with ❤️ for Mac users everywhere**
-
-[⭐ Star this repo](https://github.com/iad1tya/Quitty) • [🐦 Follow us](https://twitter.com/QuittyApp) • [💬 Join Discord](https://discord.gg/quitty)
+## Support the Project
+  <a href="https://buymeacoffee.com/iad1tya"><img src="assets/bmac.png" width="140"/></a>
+  &nbsp;
+  <a href="https://intradeus.github.io/http-protocol-redirector/?r=upi://pay?pa=iad1tya@upi&pn=Aditya%20Yadav&am=&tn=Thank%20You"><img src="assets/upi.svg" width="100"/></a>
+</div>
 
 </div>
 
