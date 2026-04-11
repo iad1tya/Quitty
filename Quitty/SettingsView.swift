@@ -437,8 +437,6 @@ struct UpdatesSettingsView: View {
                     .font(.caption)
                 Text("• GitHub Releases: Download from releases page")
                     .font(.caption)
-                Text("• Homebrew: brew install --cask quitty (coming soon)")
-                    .font(.caption)
             }
             .foregroundColor(.secondary)
             
