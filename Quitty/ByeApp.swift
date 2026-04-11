@@ -1,5 +1,6 @@
 import SwiftUI
 import UserNotifications
+import AppKit
 
 @main
 struct QuittyApp: App {
@@ -50,7 +51,12 @@ struct QuittyApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
+    private var statusItem: NSStatusItem?
+    private let criticalApps = ["com.apple.finder", "com.apple.dock", "com.apple.systemuiserver"]
+
     func applicationDidFinishLaunching(_ notification: Notification) {
+        setupStatusItem()
+
         // Set up window delegate to handle close events
         NSApplication.shared.windows.forEach { window in
             if !window.title.contains("Settings") {
@@ -76,6 +82,96 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         // Allow normal termination
         return .terminateNow
+    }
+
+    private func setupStatusItem() {
+        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+
+        if let button = statusItem?.button {
+            if let icon = NSImage(named: "MenuBarIcon") {
+                icon.isTemplate = true
+                button.image = icon
+            } else {
+                button.image = NSImage(systemSymbolName: "sparkles", accessibilityDescription: "Quitty")
+            }
+            button.toolTip = "Quitty"
+        }
+
+        let menu = NSMenu()
+        menu.delegate = self
+        menu.addItem(NSMenuItem.separator())
+
+        let closeAllItem = NSMenuItem(title: "Close All Open Applications", action: #selector(closeAllOpenApplications), keyEquivalent: "")
+        closeAllItem.target = self
+        menu.addItem(closeAllItem)
+
+        let runningAppsSubmenuItem = NSMenuItem(title: "Close Open Applications", action: nil, keyEquivalent: "")
+        let runningAppsMenu = NSMenu(title: "Close Open Applications")
+        runningAppsSubmenuItem.submenu = runningAppsMenu
+        menu.addItem(runningAppsSubmenuItem)
+
+        menu.addItem(.separator())
+        menu.addItem(NSMenuItem(title: "Quit Quitty", action: #selector(quitFromMenuBar), keyEquivalent: "q"))
+
+        statusItem?.menu = menu
+    }
+
+    @objc private func quitFromMenuBar() {
+        NSApplication.shared.terminate(nil)
+    }
+
+    @objc private func closeAllOpenApplications() {
+        for app in closableRunningApplications() {
+            _ = app.terminate()
+        }
+    }
+
+    @objc private func closeApplicationFromMenu(_ sender: NSMenuItem) {
+        guard let pid = sender.representedObject as? pid_t else { return }
+        guard let app = NSRunningApplication(processIdentifier: pid) else { return }
+        _ = app.terminate()
+    }
+
+    private func closableRunningApplications() -> [NSRunningApplication] {
+        let quittyBundleId = Bundle.main.bundleIdentifier
+
+        return NSWorkspace.shared.runningApplications
+            .filter { app in
+                guard app.activationPolicy == .regular else { return false }
+                guard let bundleId = app.bundleIdentifier else { return false }
+                if bundleId == quittyBundleId { return false }
+                if criticalApps.contains(bundleId) { return false }
+                return true
+            }
+            .sorted { ($0.localizedName ?? "") < ($1.localizedName ?? "") }
+    }
+
+    private func rebuildRunningAppsMenuIfNeeded(_ menu: NSMenu) {
+        guard let submenuItem = menu.items.first(where: { $0.title == "Close Open Applications" }),
+              let runningAppsMenu = submenuItem.submenu else {
+            return
+        }
+
+        runningAppsMenu.removeAllItems()
+
+        let apps = closableRunningApplications()
+        if apps.isEmpty {
+            let empty = NSMenuItem(title: "No open applications", action: nil, keyEquivalent: "")
+            empty.isEnabled = false
+            runningAppsMenu.addItem(empty)
+            return
+        }
+
+        for app in apps {
+            let item = NSMenuItem(title: app.localizedName ?? "Unknown App", action: #selector(closeApplicationFromMenu(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = app.processIdentifier
+            if let icon = app.icon {
+                icon.size = NSSize(width: 16, height: 16)
+                item.image = icon
+            }
+            runningAppsMenu.addItem(item)
+        }
     }
     
     private func registerNotificationObservers() {
@@ -193,11 +289,22 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     
     func windowWillClose(_ notification: Notification) {
-        // Since there's no menu bar, quit the app when window is closed
-        NSApplication.shared.terminate(nil)
+        // Keep app alive in the menu bar when the main window is closed.
+        guard let window = notification.object as? NSWindow else { return }
+        if !window.title.contains("Settings") {
+            window.orderOut(nil)
+        }
     }
     
     deinit {
-        // No status item to clean up anymore
+        if let statusItem {
+            NSStatusBar.system.removeStatusItem(statusItem)
+        }
+    }
+}
+
+extension AppDelegate: NSMenuDelegate {
+    func menuWillOpen(_ menu: NSMenu) {
+        rebuildRunningAppsMenuIfNeeded(menu)
     }
 }
