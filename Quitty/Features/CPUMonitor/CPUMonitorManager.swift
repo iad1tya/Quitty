@@ -118,25 +118,37 @@ class CPUMonitorManager: ObservableObject {
             
             let lines = output.components(separatedBy: "\n").dropFirst()
             var processes: [CPUProcess] = []
+            let fallbackIcon = NSWorkspace.shared.icon(forFileType: "public.unix-executable")
             
             for line in lines.prefix(10) {
-                let components = line.trimmingCharacters(in: .whitespaces).components(separatedBy: .whitespaces)
-                guard components.count >= 3 else { continue }
-                guard let pid = Int32(components[0]) else { continue }
-                guard let cpu = Double(components[1]), cpu > 0.1 else { continue }
-                
-                let name = components[2...].joined(separator: " ")
-                
-                // Get app info
+                let fields = line.split(maxSplits: 2, omittingEmptySubsequences: true, whereSeparator: { $0.isWhitespace })
+                guard fields.count == 3 else { continue }
+                guard let pid = Int32(fields[0]) else { continue }
+                guard let cpu = Double(fields[1]), cpu > 0.1 else { continue }
+
+                let commandPath = String(fields[2])
+                let fallbackName = URL(fileURLWithPath: commandPath).lastPathComponent
+
                 if let app = NSRunningApplication(processIdentifier: pid) {
-                    let process = CPUProcess(
-                        pid: pid,
-                        name: app.localizedName ?? name,
-                        icon: app.icon ?? NSWorkspace.shared.icon(forFile: "/System/Applications/Utilities/Terminal.app"),
-                        cpuUsage: cpu,
-                        bundleIdentifier: app.bundleIdentifier
+                    processes.append(
+                        CPUProcess(
+                            pid: pid,
+                            name: app.localizedName ?? fallbackName,
+                            icon: app.icon ?? fallbackIcon,
+                            cpuUsage: cpu,
+                            bundleIdentifier: app.bundleIdentifier
+                        )
                     )
-                    processes.append(process)
+                } else {
+                    processes.append(
+                        CPUProcess(
+                            pid: pid,
+                            name: fallbackName.isEmpty ? commandPath : fallbackName,
+                            icon: fallbackIcon,
+                            cpuUsage: cpu,
+                            bundleIdentifier: nil
+                        )
+                    )
                 }
             }
             
