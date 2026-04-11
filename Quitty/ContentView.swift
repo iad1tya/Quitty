@@ -4,7 +4,6 @@ import AppKit
 enum SidebarItem: String, CaseIterable, Identifiable {
     case dashboard = "Dashboard"
     case apps = "Apps"
-    case download = "Download"
     case systemJunk = "System Junk"
     case trashBins = "Trash Bins"
     case spaceLens = "Space Lens"
@@ -25,7 +24,6 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         switch self {
         case .dashboard: return "gauge.with.dots.needle.67percent"
         case .apps: return "square.grid.2x2"
-        case .download: return "arrow.down.circle"
         case .systemJunk: return "trash.slash"
         case .trashBins: return "trash"
         case .spaceLens: return "internaldrive"
@@ -46,7 +44,6 @@ enum SidebarItem: String, CaseIterable, Identifiable {
         switch self {
         case .dashboard: return .purple
         case .apps: return .blue
-        case .download: return .green
         case .systemJunk: return .orange
         case .trashBins: return .red
         case .spaceLens: return .purple
@@ -152,8 +149,6 @@ struct ContentView: View {
             )
         case .apps:
             AppsView()
-        case .download:
-            DownloadView()
         case .systemJunk:
             SystemJunkView(manager: junkManager)
         case .trashBins:
