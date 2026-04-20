@@ -9,6 +9,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](https://developer.apple.com/macos/)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/iad1tya/Quitty/releases)
+[![oosmetrics](https://api.oosmetrics.com/api/v1/badge/achievement/9718c310-184e-4a81-994e-53712713728f.svg)](https://oosmetrics.com/repo/iad1tya/Quitty)
 
 [Download DMG](https://github.com/iad1tya/Quitty/releases) &nbsp;|&nbsp; [Report Issues](https://github.com/iad1tya/Quitty/issues) &nbsp;|&nbsp; [Discussions](https://github.com/iad1tya/Quitty/discussions)
 
